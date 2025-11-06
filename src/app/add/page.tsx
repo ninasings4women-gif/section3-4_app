@@ -1,46 +1,79 @@
 "use client";
+
 import { useState } from "react";
-import NavButtons from "../../components/NavButtons";
+import { addTransaction } from "../../hooks/useTransactions";
 
 export default function AddPage() {
-  const [form, setForm] = useState({ type: "入金", desc: "", amount: "" });
+  const [type, setType] = useState<"入金" | "出金">("入金");
+  const [date, setDate] = useState("");
+  const [memo, setMemo] = useState("");
+  const [amount, setAmount] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`登録：${form.type} ${form.desc} ${form.amount}円（ダミー処理）`);
-    setForm({ type: "入金", desc: "", amount: "" });
+    if (!date || !memo || !amount) {
+      alert("入力していない項目があります");
+      return;
+    }
+
+    addTransaction({
+      id: Date.now(),
+      type,
+      date,
+      memo,
+      amount: Number(amount),
+    });
+
+    alert("登録しました！");
+    setDate("");
+    setMemo("");
+    setAmount("");
   };
 
   return (
-    <main style={{ padding: 20 }}>
-      <h2>収支を登録</h2>
+    <div>
+      <h1>収支を登録</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>種別：</label>
-          <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
-            <option>入金</option>
-            <option>出金</option>
+          <label>入出金：</label>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value as "入金" | "出金")}
+          >
+            <option value="入金">入金</option>
+            <option value="出金">出金</option>
           </select>
         </div>
+
         <div>
-          <label>内容：</label>
+          <label>日付：</label>
           <input
-            type="text"
-            value={form.desc}
-            onChange={(e) => setForm({ ...form, desc: e.target.value })}
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
           />
         </div>
+
+        <div>
+          <label>メモ：</label>
+          <input
+            type="text"
+            value={memo}
+            onChange={(e) => setMemo(e.target.value)}
+          />
+        </div>
+
         <div>
           <label>金額：</label>
           <input
             type="number"
-            value={form.amount}
-            onChange={(e) => setForm({ ...form, amount: e.target.value })}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
           />
         </div>
+
         <button type="submit">登録</button>
       </form>
-      <NavButtons />
-    </main>
+    </div>
   );
 }
