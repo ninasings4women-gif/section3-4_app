@@ -1,4 +1,3 @@
-// src/hooks/useTransactions.ts
 "use client";
 
 import useSWR, { mutate } from "swr";
@@ -16,7 +15,10 @@ const initialData: Transaction[] = [
   { id: 2, type: "出金", date: "2025-11-06", memo: "食費", amount: 5000 },
 ];
 
-const fetcher = () => Promise.resolve(initialData);
+const fetcher = () => {
+  const saved = localStorage.getItem("transactions");
+  return Promise.resolve(saved ? JSON.parse(saved) : initialData);
+};
 
 export function useTransactions() {
   return useSWR<Transaction[]>("transactions", fetcher);
@@ -25,7 +27,8 @@ export function useTransactions() {
 // 新しい取引を追加する関数
 export function addTransaction(newItem: Transaction) {
   mutate("transactions", (data?: Transaction[]) => {
-    if (!data) return [newItem];
-    return [...data, newItem];
+    const updated = data ? [...data, newItem] : [newItem];
+    localStorage.setItem("transactions", JSON.stringify(updated));
+    return updated;
   }, false);
 }

@@ -1,8 +1,7 @@
 "use client";
 
-"use client";
-
 import { useTransactions } from "../../hooks/useTransactions";
+
 
 export default function TransactionsPage() {
   const { data, error } = useTransactions();
@@ -11,15 +10,24 @@ export default function TransactionsPage() {
   if (!data) return <div>読み込み中…</div>;
 
   return (
+
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">入出金明細</h1>
       <ul>
         {data.map((t) => (
           <li key={t.id} className="border-b py-2">
-            {t.date} / {t.type} / {t.memo} / {t.amount.toLocaleString()}円
+            {t.date} / {t.type} / {t.memo} / {t.amount.toLocaleString("ja-JP")}円
           </li>
         ))}
       </ul>
+
+    <div className="font-semibold mt-4">
+        合計:{" "}
+        {data
+          .reduce((sum, t) => sum + t.amount, 0)
+          .toLocaleString("ja-JP")}
+        円
+      </div>
     </div>
   );
 }

@@ -1,9 +1,10 @@
 "use client";
+import { useEffect } from "react";
 
 export default function StopPage() {
-  if (typeof window !== "undefined") {
+  useEffect(() => {
     window.location.href = "https://setusoku.com/";
-  }
+  }, []);
+
   return <p>外部サイトに移動中...</p>;
 }
-

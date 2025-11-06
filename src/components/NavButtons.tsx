@@ -1,12 +1,27 @@
 "use client";
+
 import Link from "next/link";
 
 export default function NavButtons() {
   return (
-    <div style={{ marginTop: 20, display: "flex", gap: 10, justifyContent: "center" }}>
-      <Link href="/transactions"><button>入出金詳細</button></Link>
-      <Link href="/add"><button>収支を登録</button></Link>
-      <Link href="/stop"><button>STOP使いすぎ</button></Link>
+    <div className="flex justify-center gap-4 mt-6">
+      <Link href="/transactions"
+        className="px-4 py-2 bg-blue-300 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition"
+      >
+          入出金詳細
+        </Link>
+
+      <Link href="/add"
+        className="px-4 py-2 bg-green-400 text-white font-semibold rounded-lg shadow hover:bg-green-700 transition"
+        >
+          収支を登録
+        </Link>
+
+      <Link href="/stop"
+        className="px-4 py-2 bg-red-400 text-white font-semibold rounded-lg shadow hover:bg-red-700 transition"
+        >
+          STOP使いすぎ
+        </Link>
     </div>
   );
 }
