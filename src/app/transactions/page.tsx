@@ -24,11 +24,7 @@ export default function TransactionsPage() {
       </ul>
 
     <div className="font-semibold mt-4">
-        合計:{" "}
-        {data
-          .reduce((sum, t) => sum + t.amount, 0)
-          .toLocaleString("ja-JP")}
-        円
+        合計:{total.toLocaleString("ja-JP")}円
       </div>
     </div>
   );
