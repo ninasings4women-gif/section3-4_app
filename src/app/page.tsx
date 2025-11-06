@@ -1,50 +1,34 @@
-// app/page.tsx
 "use client";
 
-import Link from "next/link";
-import useSWR from "swr";
+import { useTransactions } from "@/hooks/useTransactions";
 
-// モックデータ用フェッチ関数
-const fetcher = () =>
-  Promise.resolve({
-    balance: 10000, // 残高のモック値
-  });
+import NavButtons from "@/components/NavButtons";
 
 export default function HomePage() {
-  const { data, error } = useSWR("balance", fetcher);
+  const { data: transactions } = useTransactions();
 
-  if (error) return <div>読み込みエラー</div>;
-  if (!data) return <div>読み込み中…</div>;
+ // transactions がまだ読み込まれていない場合の初期値
+  if (!transactions) return <p className="text-center mt-10">データは未登録です</p>;
+
+// 残高計算
+  const balance = transactions.reduce((acc, t) => {
+    return t.type === "入金" ? acc + t.amount : acc - t.amount;
+  }, 0);
 
   return (
-    <main className="p-8 text-center">
-      <h1 className="text-4xl font-bold mb-6">家計簿アプリ</h1>
-      
-      <div className="text-2xl mb-8">
-        現在の残高: <span className="font-mono">{data.balance}円</span>
-      </div>
+    <div className="max-w-md mx-auto mt-10 text-center bg-white shadow-md rounded-xl p-6">
+      <h1 className="text-2xl font-bold mb-4">家計簿アプリ</h1>
 
-      <div className="space-x-4">
-        <Link
-          href="/transactions"
-          className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          入出金詳細
-        </Link>
-        <Link
-          href="/add"
-          className="px-6 py-3 bg-green-500 text-white rounded hover:bg-green-600"
-        >
-          収支を登録
-        </Link>
-        <Link
-          href="https://setusoku.com/"
-          target="_blank"
-          className="px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600"
-        >
-          STOP使いすぎ
-        </Link>
-      </div>
-    </main>
+      <p className="text-lg mb-2">現在の残高</p>
+      <p
+        className={`text-3xl font-extrabold mb-6 ${
+          balance >= 0 ? "text-green-600" : "text-red-600"
+        }`}
+      >
+        ¥{balance.toLocaleString()}
+      </p>
+
+      <NavButtons />
+    </div>
   );
 }

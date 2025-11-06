@@ -10,25 +10,38 @@ export type Transaction = {
   amount: number;
 };
 
+// 初期データ
 const initialData: Transaction[] = [
   { id: 1, type: "入金", date: "2025-11-06", memo: "給料", amount: 100000 },
   { id: 2, type: "出金", date: "2025-11-06", memo: "食費", amount: 5000 },
 ];
 
-const fetcher = () => {
-  const saved = localStorage.getItem("transactions");
-  return Promise.resolve(saved ? JSON.parse(saved) : initialData);
+// SWRのキー
+const KEY = "transactions";
+
+// fetcher
+const fetcher = async (): Promise<Transaction[]> => {
+  if (typeof window === "undefined") return initialData;
+  const saved = localStorage.getItem(KEY);
+  return saved ? JSON.parse(saved) : initialData;
 };
 
+// 一覧を取得するフック
 export function useTransactions() {
-  return useSWR<Transaction[]>("transactions", fetcher);
+  return useSWR<Transaction[]>(KEY, fetcher, { fallbackData: initialData });
 }
 
-// 新しい取引を追加する関数
+// 新しい収支を追加
 export function addTransaction(newItem: Transaction) {
-  mutate("transactions", (data?: Transaction[]) => {
-    const updated = data ? [...data, newItem] : [newItem];
-    localStorage.setItem("transactions", JSON.stringify(updated));
-    return updated;
-  }, false);
+  mutate(
+    KEY,
+    (currentData: Transaction[] = []) => {
+      const updated = [...currentData, newItem];
+      if (typeof window !== "undefined") {
+        localStorage.setItem(KEY, JSON.stringify(updated)); 
+      }
+      return updated;
+    },
+    { revalidate: false } 
+  );
 }

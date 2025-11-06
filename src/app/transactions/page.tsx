@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransactions } from "../../hooks/useTransactions";
+import { useTransactions } from "@/hooks/useTransactions";
 
 
 export default function TransactionsPage() {
@@ -8,6 +8,8 @@ export default function TransactionsPage() {
 
   if (error) return <div>データの取得に失敗しました</div>;
   if (!data) return <div>読み込み中…</div>;
+
+  const total = data.reduce((sum, t) => sum + (t.type === "入金" ? t.amount : -t.amount), 0);
 
   return (
 
