@@ -17,7 +17,7 @@ export default function HomePage() {
 
   return (
     <div className="max-w-md mx-auto mt-10 text-center bg-white shadow-md rounded-xl p-6">
-      <h1 className="text-2xl font-bold mb-4">家計簿アプリ</h1>
+      <h1 className="text-2xl font-bold mb-4">お金の動きを見てみよう👀</h1>
 
       <p className="text-lg mb-2">現在の残高</p>
       <p

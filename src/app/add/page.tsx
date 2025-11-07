@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { addTransaction } from "../../hooks/useTransactions"; // ←相対パス
+import { addTransaction } from "../../hooks/useTransactions"; 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AddPage() {
   const [type, setType] = useState<"入金" | "出金">("入金");
@@ -89,6 +90,15 @@ export default function AddPage() {
         </button>
       </form>
       {/* ✅ form 終了 */}
+
+      <div className="mt-6 text-center">
+       <Link 
+         href="/"
+         className="px-4 py-2 bg-pink-500 text-white font-semibold rounded-lg shadow hover:bg-pink-600 transition"
+        >
+            ホーム
+       </Link>
+     </div>
     </div>
   );
 }

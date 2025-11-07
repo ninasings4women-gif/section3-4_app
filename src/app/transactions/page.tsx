@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransactions } from "@/hooks/useTransactions";
-
+import Link from "next/link";
 
 export default function TransactionsPage() {
   const { data, error } = useTransactions();
@@ -26,6 +26,23 @@ export default function TransactionsPage() {
     <div className="font-semibold mt-4">
         合計:{total.toLocaleString("ja-JP")}円
       </div>
+
+       <div className="flex justify-center gap-4 mt-6">
+        <Link href="/"
+          className="px-4 py-2 bg-pink-300 text-white font-semibold rounded-lg shadow hover:bg-pink-600 transition"
+        >
+            ホーム
+        </Link>
+        <Link href="/"
+            className="px-4 py-2 bg-green-400 text-white font-semibold rounded-lg shadow hover:bg-green-600 transition"
+          >
+            収支登録
+          
+        </Link>
+
+      </div>
     </div>
+
+    
   );
 }
